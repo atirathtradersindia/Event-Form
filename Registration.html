@@ -1,0 +1,2250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atirath Holdings - Event Registration</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #1a2a6c;
+            --secondary-color: #2a3c7c;
+            --accent-color: #ffd700;
+            --success-color: #4CAF50;
+            --error-color: #ff6b6b;
+            --warning-color: #ff9800;
+            --light-color: #f8f9fa;
+            --dark-color: #333;
+            --border-radius: 8px;
+            --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: 
+                linear-gradient(rgba(1, 10, 46, 0.7), rgba(26, 42, 108, 0.7)),
+                url('https://ieefa.org/sites/default/files/styles/header_full/public/2024-03/shutterstock_665738593%20%281%29.jpg?itok=UUAOtj5r');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: var(--dark-color);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 0;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 100%;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 0;
+            box-shadow: none;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            border: none;
+            min-height: 100vh;
+        }
+        
+        .header {
+            background: linear-gradient(to right, rgba(26, 42, 108, 0.3), rgba(42, 60, 124, 0.3));
+            color: white;
+            padding: 15px;
+            text-align: center;
+            position: relative;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .logo-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+        
+        .logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            box-shadow: var(--box-shadow);
+            border: 2px solid white;
+            overflow: hidden;
+            background-color: white;
+        }
+        
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .guest-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 15px 0;
+            gap: 15px;
+        }
+        
+        .guest-info {
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.15);
+            border-radius: var(--border-radius);
+            border-left: 4px solid var(--accent-color);
+            flex: 1;
+            backdrop-filter: blur(5px);
+        }
+        
+        .guest-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid var(--accent-color);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            flex-shrink: 0;
+        }
+        
+        .guest-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .guest-name {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+        
+        .guest-title {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .header-image {
+            width: 100%;
+            height: 80px;
+            background: 
+                linear-gradient(rgba(0, 0, 0, 0.268), rgba(0, 0, 0, 0.294)),
+                url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTt7eXVupAQoXWqwoDpoxnj6B1dh5TjHyPGtne-b2Ms3o3BqYX2HxxnRdZyfw3arr531Sg&usqp=CAU');
+            background-size: cover;
+            background-position: center;
+            margin-top: 10px;
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+            padding: 0 10px;
+            text-align: center;
+        }
+        
+        .form-container {
+            padding: 15px;
+            background-color: transparent;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        input, select, button {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: var(--border-radius);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            font-size: 16px;
+            transition: var(--transition);
+            background-color: rgba(255, 255, 255, 0.9);
+        }
+        
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+        }
+        
+        input:focus, select:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.3);
+            outline: none;
+            background-color: white;
+        }
+        
+        .error {
+            color: var(--error-color);
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        .success {
+            color: var(--success-color);
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        
+        .btn {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .btn:disabled {
+            background: rgba(189, 195, 199, 0.7);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .otp-section {
+            background-color: rgba(248, 249, 250, 0.9);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-top: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .otp-inputs {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+        }
+        
+        .otp-inputs input {
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            background-color: white;
+        }
+        
+        .otp-options {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        
+        .otp-options button {
+            width: 48%;
+        }
+        
+        .file-upload {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .file-upload-btn {
+            background: rgba(52, 152, 219, 0.9);
+            color: white;
+            padding: 12px 20px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            text-align: center;
+            display: block;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .file-upload input[type=file] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        
+        .preview-container {
+            margin-top: 10px;
+            text-align: center;
+            display: none;
+        }
+        
+        .preview-image {
+            max-width: 150px;
+            max-height: 150px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+        
+        .form-row {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .form-row .form-group {
+            flex: 1;
+        }
+        
+        .event-details {
+            background-color: rgba(248, 249, 250, 0.9);
+            padding: 12px;
+            border-radius: var(--border-radius);
+            margin-bottom: 15px;
+            border-left: 4px solid var(--primary-color);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .event-details h3 {
+            color: var(--primary-color);
+            margin-bottom: 8px;
+        }
+        
+        .event-details p {
+            margin-bottom: 4px;
+            color: #555;
+        }
+        
+        .id-info {
+            background-color: rgb(255, 255, 255);
+            padding: 8px;
+            border-radius: 5px;
+            margin-top: 5px;
+            font-size: 0.85rem;
+        }
+        
+        .form-section {
+            display: none;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* SMS Simulation Styles */
+        .sms-simulation {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 300px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            overflow: hidden;
+        }
+        
+        .sms-header {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        .sms-body {
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .sms-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+            width: auto;
+        }
+        
+        .sms-number {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        
+        .sms-otp {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin: 15px 0;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        
+        /* Enhanced Event Pass Styles - ID Card Format */
+        .event-pass-container {
+            display: none;
+            padding: 10px;
+            background: transparent;
+            border-radius: 0;
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+        }
+        
+        .event-pass {
+            padding: 15px;
+            background: linear-gradient(135deg, #1a2a6c 0%, #2a3c7c 100%);
+            border-radius: 10px;
+            position: relative;
+            max-width: 100%;
+            margin: 0 auto;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .pass-header {
+            text-align: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+            position: relative;
+        }
+        
+        .logo-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .pass-logo {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            border: 2px solid white;
+            overflow: hidden;
+            background-color: white;
+        }
+        
+        .pass-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        .business-text {
+            font-size: 1.1rem;
+            font-weight: 1000;
+            color: white;
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        
+        .year-text {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #ffd700;
+            margin-bottom: 8px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        
+        .vip-section {
+            background: linear-gradient(to right, #ffd700, #ffed4e);
+            color: #1a2a6c;
+            padding: 5px 10px;
+            border-radius: 12px;
+            display: inline-block;
+            margin-bottom: 10px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .pass-content {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .pass-left {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .pass-right {
+            flex: 0 0 auto;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .pass-photo-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .pass-photo-label {
+            font-size: 0.75rem;
+            color: #ffd700;
+            font-weight: 600;
+        }
+        
+        .pass-user-image {
+            width: 100px;
+            height: 120px;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 3px solid #ffd700;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+            flex-shrink: 0;
+        }
+        
+        .pass-user-image::before {
+            content: "";
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            right: -4px;
+            bottom: -4px;
+            background: linear-gradient(45deg, #1a2a6c, #2a3c7c, #ffd700);
+            border-radius: 8px;
+            z-index: -1;
+        }
+        
+        .pass-user-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .user-name {
+            font-size: 1.2rem;
+            color: white;
+            font-weight: 700;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .user-name::after {
+            content: "";
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(to right, #1a2a6c, #ffd700);
+            border-radius: 2px;
+        }
+        
+        .user-title {
+            font-size: 0.9rem;
+            color: #ffd700;
+            font-weight: 600;
+            margin-bottom: 10px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .user-details {
+            margin-bottom: 10px;
+        }
+        
+        .detail-row {
+            display: flex;
+            margin-bottom: 5px;
+            padding: 3px 0;
+            border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
+            transition: all 0.3s;
+        }
+        
+        .detail-row:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            padding-left: 6px;
+        }
+        
+        .detail-label {
+            font-weight: 600;
+            color: #ffd700;
+            width: 100px;
+            font-size: 0.8rem;
+        }
+        
+        .detail-value {
+            color: white;
+            flex-grow: 1;
+            font-size: 0.8rem;
+        }
+        
+        .pass-qr-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .qr-code {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 8px;
+            border: 2px solid #ffd700;
+            padding: 5px;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .qr-code::before {
+            content: "";
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            background: linear-gradient(45deg, #1a2a6c, #2a3c7c, #ffd700);
+            border-radius: 7px;
+            z-index: -1;
+        }
+        
+        .qr-code img {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .qr-note {
+            font-size: 0.65rem;
+            color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            max-width: 100px;
+        }
+        
+        .pass-footer {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            margin-top: 15px;
+            padding-top: 12px;
+            border-top: 2px solid rgba(255, 255, 255, 0.3);
+            gap: 10px;
+        }
+        
+        .event-info {
+            flex: 1;
+        }
+        
+        .event-info h3 {
+            color: #ffd700;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .event-info h3::after {
+            content: "";
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: linear-gradient(to right, #1a2a6c, #ffd700);
+            border-radius: 1px;
+        }
+        
+        .event-info p {
+            margin-bottom: 3px;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .sponsor-section {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .sponsor-text {
+            font-weight: 600;
+            color: #ffd700;
+            margin-bottom: 3px;
+            font-size: 0.8rem;
+        }
+        
+        .website-text {
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .pass-actions {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .action-btn {
+            padding: 10px 15px;
+            border-radius: var(--border-radius);
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            transition: var(--transition);
+            font-size: 0.85rem;
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .download-btn {
+            background: linear-gradient(to right, #1a2a6c, #2a3c7c);
+            color: white;
+        }
+        
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(26, 42, 108, 0.4);
+        }
+        
+        .back-btn {
+            background: linear-gradient(to right, #95a5a6, #7f8c8d);
+            color: white;
+        }
+        
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 12px rgba(149, 165, 166, 0.4);
+        }
+        
+        /* Serial Number Styling - Improved positioning */
+        .serial-number {
+            position: relative;
+            background: linear-gradient(to right, #1a2a6c, #2a3c7c);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            margin: 8px auto 0 auto;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            display: block;
+            text-align: center;
+            width: fit-content;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        /* Decorative Elements */
+        .corner-decoration {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            z-index: 0;
+        }
+        
+        .corner-top-left {
+            top: 0;
+            left: 0;
+            border-top: 2px solid #ffd700;
+            border-left: 2px solid #ffd700;
+            border-top-left-radius: 10px;
+        }
+        
+        .corner-top-right {
+            top: 0;
+            right: 0;
+            border-top: 2px solid #ffd700;
+            border-right: 2px solid #ffd700;
+            border-top-right-radius: 10px;
+        }
+        
+        .corner-bottom-left {
+            bottom: 0;
+            left: 0;
+            border-bottom: 2px solid #ffd700;
+            border-left: 2px solid #ffd700;
+            border-bottom-left-radius: 10px;
+        }
+        
+        .corner-bottom-right {
+            bottom: 0;
+            right: 0;
+            border-bottom: 2px solid #ffd700;
+            border-right: 2px solid #ffd700;
+            border-bottom-right-radius: 10px;
+        }
+        
+        .pass-graphic {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            opacity: 0.05;
+            z-index: 0;
+        }
+        
+        .graphic-top-right {
+            top: 10px;
+            right: 10px;
+            background: radial-gradient(circle, #ffd700 0%, transparent 70%);
+        }
+        
+        .graphic-bottom-left {
+            bottom: 10px;
+            left: 10px;
+            background: radial-gradient(circle, #ffd700 0%, transparent 70%);
+        }
+        
+        /* Loading Spinner */
+        .loading-spinner {
+            display: none;
+            width: 35px;
+            height: 35px;
+            margin: 8px auto;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid var(--accent-color);
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Progress Bar */
+        .progress-bar {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .progress-bar::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-50%);
+            z-index: 1;
+        }
+        
+        .progress-step {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            position: relative;
+            z-index: 2;
+            transition: var(--transition);
+            font-size: 0.8rem;
+        }
+        
+        .progress-step.active {
+            background: var(--accent-color);
+            color: var(--primary-color);
+        }
+        
+        .progress-step.completed {
+            background: var(--success-color);
+        }
+        
+        .step-label {
+            position: absolute;
+            top: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            white-space: nowrap;
+            font-size: 0.7rem;
+            color: white;
+        }
+        
+        /* Form Validation Improvements */
+        .input-error {
+            border-color: var(--error-color) !important;
+            box-shadow: 0 0 0 2px rgba(255, 107, 107, 0.3) !important;
+        }
+        
+        .input-success {
+            border-color: var(--success-color) !important;
+            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.3) !important;
+        }
+        
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            padding: 12px 15px;
+            border-radius: var(--border-radius);
+            color: white;
+            font-weight: 500;
+            box-shadow: var(--box-shadow);
+            z-index: 1001;
+            transform: translateX(150%);
+            transition: transform 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        
+        .toast.success {
+            background-color: var(--success-color);
+        }
+        
+        .toast.error {
+            background-color: var(--error-color);
+        }
+        
+        .toast.info {
+            background-color: var(--primary-color);
+        }
+        
+        .toast.warning {
+            background-color: var(--warning-color);
+        }
+        
+        /* Form Step Styles */
+        .form-step {
+            display: none;
+        }
+        
+        .form-step.active {
+            display: block;
+        }
+        
+        .form-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+        
+        .form-navigation button {
+            width: 48%;
+        }
+        
+        .form-navigation .btn-secondary {
+            background: rgba(149, 165, 166, 0.9);
+        }
+        
+        .form-navigation .btn-secondary:hover {
+            background: rgba(127, 140, 141, 0.9);
+        }
+        
+        .field-required::after {
+            content: " *";
+            color: var(--error-color);
+        }
+        
+        .form-hint {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 4px;
+        }
+        
+        /* Enhanced OTP input styling */
+        .otp-inputs input {
+            transition: var(--transition);
+        }
+        
+        .otp-inputs input:focus {
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.3);
+            outline: none;
+        }
+        
+        /* Guest type specific styling */
+        .vip-pass {
+            border: 3px solid #ffd700;
+        }
+        
+        .corporate-pass {
+            border: 3px solid #3498db;
+        }
+        
+        .government-pass {
+            border: 3px solid #2ecc71;
+        }
+        
+        /* Form persistence indicator */
+        .form-saved-indicator {
+            position: fixed;
+            bottom: 15px;
+            left: 15px;
+            background: var(--success-color);
+            color: white;
+            padding: 6px 12px;
+            border-radius: var(--border-radius);
+            font-size: 0.8rem;
+            box-shadow: var(--box-shadow);
+            display: none;
+            z-index: 1000;
+        }
+        
+        /* Export button styling */
+        .export-btn {
+            background: linear-gradient(to right, #27ae60, #2ecc71);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 600;
+            margin-top: 8px;
+            display: none;
+        }
+        
+        /* Admin panel styling */
+        .admin-panel {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 12px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            z-index: 1000;
+            display: none;
+        }
+        
+        .admin-panel h3 {
+            margin-bottom: 8px;
+            color: var(--primary-color);
+            font-size: 1rem;
+        }
+        
+        .admin-panel button {
+            margin-bottom: 4px;
+            width: 100%;
+            font-size: 0.85rem;
+            padding: 8px 12px;
+        }
+        
+        /* Enhanced accessibility */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+        
+        /* Desktop-specific styles */
+        @media (min-width: 769px) {
+            .container {
+                max-width: 900px;
+                border-radius: 15px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                min-height: auto;
+            }
+            
+            .header {
+                padding: 25px;
+            }
+            
+            .logo {
+                width: 80px;
+                height: 80px;
+                margin-right: 15px;
+            }
+            
+            .logo-text {
+                font-size: 2.2rem;
+            }
+            
+            .guest-section {
+                margin: 25px 0;
+                gap: 20px;
+            }
+            
+            .guest-info {
+                padding: 15px;
+            }
+            
+            .guest-image {
+                width: 120px;
+                height: 120px;
+            }
+            
+            .guest-name {
+                font-size: 1.6rem;
+            }
+            
+            .guest-title {
+                font-size: 1rem;
+            }
+            
+            .header-image {
+                height: 120px;
+                font-size: 1.5rem;
+                margin-top: 15px;
+            }
+            
+            .form-container {
+                padding: 30px;
+            }
+            
+            .form-group {
+                margin-bottom: 20px;
+            }
+            
+            .form-row {
+                gap: 15px;
+            }
+            
+            .event-details {
+                padding: 15px;
+                margin-bottom: 20px;
+            }
+            
+            .event-pass-container {
+                padding: 20px;
+                border-radius: 10px;
+            }
+            
+            .event-pass {
+                padding: 25px;
+                border-radius: 15px;
+                max-width: 500px;
+            }
+            
+            .pass-header {
+                margin-bottom: 20px;
+                padding-bottom: 15px;
+            }
+            
+            .pass-logo {
+                width: 90px;
+                height: 90px;
+            }
+            
+            .business-text {
+                font-size: 1.2rem;
+            }
+            
+            .year-text {
+                font-size: 1.2rem;
+                margin-bottom: 10px;
+            }
+            
+            .vip-section {
+                padding: 6px 12px;
+                border-radius: 15px;
+                margin-bottom: 15px;
+                font-size: 0.9rem;
+            }
+            
+            .pass-content {
+                flex-direction: row;
+                gap: 20px;
+                margin-bottom: 20px;
+            }
+            
+            .pass-right {
+                flex-direction: column;
+                justify-content: flex-start;
+                margin-top: 0;
+            }
+            
+            .pass-user-image {
+                width: 120px;
+                height: 140px;
+            }
+            
+            .user-name {
+                font-size: 1.4rem;
+                margin-bottom: 8px;
+            }
+            
+            .user-title {
+                font-size: 1rem;
+                margin-bottom: 15px;
+                padding-bottom: 8px;
+            }
+            
+            .user-details {
+                margin-bottom: 15px;
+            }
+            
+            .detail-row {
+                margin-bottom: 6px;
+                padding: 4px 0;
+            }
+            
+            .detail-label {
+                width: 120px;
+                font-size: 0.85rem;
+            }
+            
+            .detail-value {
+                font-size: 0.85rem;
+            }
+            
+            .qr-code {
+                width: 120px;
+                height: 120px;
+                margin-bottom: 10px;
+            }
+            
+            .qr-note {
+                font-size: 0.7rem;
+                max-width: 120px;
+            }
+            
+            .pass-footer {
+                flex-direction: row;
+                margin-top: 20px;
+                padding-top: 15px;
+                gap: 0;
+            }
+            
+            .sponsor-section {
+                text-align: right;
+            }
+            
+            .pass-actions {
+                flex-direction: row;
+                gap: 15px;
+                margin-top: 20px;
+            }
+            
+            .action-btn {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+            
+            .serial-number {
+                padding: 5px 10px;
+                border-radius: 15px;
+                font-size: 0.9rem;
+                margin: 10px auto 0 auto;
+            }
+            
+            .corner-decoration {
+                width: 60px;
+                height: 60px;
+            }
+            
+            .pass-graphic {
+                width: 80px;
+                height: 80px;
+            }
+            
+            .loading-spinner {
+                width: 40px;
+                height: 40px;
+                margin: 10px auto;
+                border: 4px solid rgba(255, 255, 255, 0.3);
+                border-top: 4px solid var(--accent-color);
+            }
+            
+            .progress-bar {
+                margin-bottom: 30px;
+            }
+            
+            .progress-step {
+                width: 30px;
+                height: 30px;
+                font-size: 1rem;
+            }
+            
+            .step-label {
+                top: 35px;
+                font-size: 0.8rem;
+            }
+            
+            .toast {
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                font-size: 1rem;
+            }
+            
+            .form-saved-indicator {
+                bottom: 20px;
+                left: 20px;
+                padding: 8px 15px;
+                font-size: 0.85rem;
+            }
+            
+            .export-btn {
+                padding: 10px 15px;
+                margin-top: 10px;
+            }
+            
+            .admin-panel {
+                top: 20px;
+                left: 20px;
+                padding: 15px;
+            }
+            
+            .admin-panel h3 {
+                font-size: 1.2rem;
+                margin-bottom: 10px;
+            }
+            
+            .admin-panel button {
+                margin-bottom: 5px;
+                padding: 10px 15px;
+                font-size: 1rem;
+            }
+        }
+        
+        /* Mobile-specific improvements */
+        @media (max-width: 768px) {
+            .form-row {
+                flex-direction: column;
+                gap: 0;
+            }
+            
+            .otp-inputs input {
+                width: 40px;
+                height: 40px;
+                min-height: 44px; /* Minimum touch target size */
+            }
+            
+            .logo-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .logo {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+            
+            .logo-text {
+                font-size: 1.8rem;
+            }
+            
+            .guest-name {
+                font-size: 1.4rem;
+            }
+            
+            .guest-section {
+                flex-direction: column-reverse;
+                text-align: center;
+            }
+            
+            .guest-image {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .progress-bar {
+                margin-bottom: 40px;
+            }
+            
+            .step-label {
+                font-size: 0.7rem;
+            }
+            
+            .form-navigation {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .form-navigation button {
+                width: 100%;
+            }
+            
+            input, select, button {
+                min-height: 44px; /* Minimum touch target size */
+            }
+            
+            .admin-panel {
+                position: relative;
+                top: auto;
+                left: auto;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Toast Notifications -->
+    <div class="toast" id="toast"></div>
+    
+    <!-- Form Saved Indicator -->
+    <div class="form-saved-indicator" id="formSavedIndicator">Form Progress Saved</div>
+    
+    <!-- Admin Panel -->
+    <div class="admin-panel" id="adminPanel">
+        <h3>Admin Panel</h3>
+        <button id="exportDataBtn" class="export-btn">Export Registration Data</button>
+        <button id="clearDataBtn" class="btn" style="background: rgba(231, 76, 60, 0.9);">Clear All Data</button>
+        <button id="toggleAdminBtn" class="btn btn-secondary">Close Admin</button>
+    </div>
+    
+    <!-- SMS Simulation Popup -->
+    <div class="overlay" id="overlay"></div>
+    <div class="sms-simulation" id="smsSimulation">
+        <div class="sms-header">
+            SMS Received
+            <button class="sms-close" id="smsClose">×</button>
+        </div>
+        <div class="sms-body">
+            <p>New message from <span class="sms-number" id="smsSender">ATIRATH</span></p>
+            <div class="sms-otp" id="smsOtp">123456</div>
+            <p>Your OTP for event registration is shown above.</p>
+            <p><small>This is a simulation. In a real implementation, this would be sent via SMS gateway.</small></p>
+        </div>
+    </div>
+
+     <div class="container">
+        <div class="header">
+            <div class="logo-container">
+                <div class="logo">
+                    <!-- Company Logo PNG -->
+                    <img src="./Agro Logo.png" alt="Atirath Holdings Logo">
+                </div>
+                <div class="logo-text">Atirath Holdings India Limited</div>
+            </div>
+            
+            <div class="guest-section">
+                <div class="guest-info">
+                    <div class="guest-name">Chief Guest: Sri Nara Chandra Babu Naidu Garu</div>
+                    <div class="guest-title">Honorable Chief Minister of Andhra Pradesh</div>
+                </div>
+                <div class="guest-image">
+                    <!-- Chief Guest PNG Image -->
+                    <img src="./ncbn.jpg" alt="Chief Guest">
+                </div>
+            </div>
+            
+            <div class="header-image">
+                Exclusive Corporate Event under the Aegis of Atirath Holdings - Laying Foundation Stone for First 3 Compressed Bio Gas (CBG) Plants of a ₹4,000 Crore Initiative in Andhra Pradesh
+            </div>
+        </div>
+        
+        <div class="form-container">
+            <!-- Progress Bar -->
+            <div class="progress-bar">
+                <div class="progress-step active" id="step1">
+                    1
+                    <div class="step-label">ID Verification</div>
+                </div>
+                <div class="progress-step" id="step2">
+                    2
+                    <div class="step-label">Personal Details</div>
+                </div>
+                <div class="progress-step" id="step3">
+                    3
+                    <div class="step-label">OTP Verification</div>
+                </div>
+                <div class="progress-step" id="step4">
+                    4
+                    <div class="step-label">Event Pass</div>
+                </div>
+            </div>
+            
+            <div class="event-details">
+                <h3>Event Details</h3>
+                <p><strong>Date:</strong> November 26, 2025</p>
+                <p><strong>Time:</strong> 9:00 AM - 5:00 PM</p>
+                <p><strong>Venue:</strong> Varun Novotel, Near Benz Circle, Vijayawada</p>
+                <p><strong>Theme:</strong> Innovation & Strategic Growth</p>
+            </div>
+            
+            <form id="registrationForm">
+                <!-- Step 1: ID Verification -->
+                <div class="form-step active" id="step1-form">
+                    <div class="form-group">
+                        <label for="userId" class="field-required" id="userIdLabel">Unique Registration ID</label>
+                        <input type="text" id="userId" aria-labelledby="userIdLabel" aria-required="true" aria-describedby="userIdError userIdSuccess" placeholder="Enter your provided registration ID" required>
+                        <div class="id-info">
+                            <strong>Note:</strong> Use the unique registration ID provided to you. Each ID can only be used once.
+                        </div>
+                        <div id="userIdError" class="error" role="alert" aria-live="polite"></div>
+                        <div id="userIdSuccess" class="success" role="status" aria-live="polite"></div>
+                    </div>
+                    
+                    <div class="form-navigation">
+                        <button type="button" id="nextBtn" class="btn">Next</button>
+                    </div>
+                </div>
+                
+                <!-- Step 2: Personal Details -->
+                <div class="form-step" id="step2-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name" class="field-required" id="nameLabel">Full Name</label>
+                            <input type="text" id="name" aria-labelledby="nameLabel" aria-required="true" aria-describedby="nameError" placeholder="Enter your full name" required>
+                            <div id="nameError" class="error" role="alert" aria-live="polite"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email" class="field-required" id="emailLabel">Email Address</label>
+                            <input type="email" id="email" aria-labelledby="emailLabel" aria-required="true" aria-describedby="emailError" placeholder="Enter your email (e.g., name@example.com)" required pattern="^[^@\s]+@[^@\s]+\.[^@\s]+$" title="Please enter a valid email address">
+                            <div id="emailError" class="error" role="alert" aria-live="polite"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="phone" class="field-required" id="phoneLabel">Phone Number</label>
+                            <input type="tel" id="phone" aria-labelledby="phoneLabel" aria-required="true" aria-describedby="phoneError" placeholder="Enter 10-digit phone number" required pattern="[0-9]{10}" title="Please enter exactly 10 digits" maxlength="10">
+                            <div id="phoneError" class="error" role="alert" aria-live="polite"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="aadhaar" class="field-required" id="aadhaarLabel">Aadhaar Number</label>
+                            <input type="text" id="aadhaar" aria-labelledby="aadhaarLabel" aria-required="true" aria-describedby="aadhaarError" placeholder="Enter 12-digit Aadhaar number" required pattern="[0-9]{12}" title="Please enter exactly 12 digits" maxlength="12">
+                            <div id="aadhaarError" class="error" role="alert" aria-live="polite"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="guestType" class="field-required" id="guestTypeLabel">Guest Type</label>
+                            <select id="guestType" aria-labelledby="guestTypeLabel" aria-required="true" aria-describedby="guestTypeError" required>
+                                <option value="">Select Guest Type</option>
+                                <option value="VIP Guest">VIP Guest</option>
+                                <option value="Corporate Partner">Corporate Partner</option>
+                                <option value="Government Official">Government Official</option>
+                                <option value="Media Representative">Media Representative</option>
+                                <option value="Industry Expert">Industry Expert</option>
+                                <option value="Investor">Guest</option>
+                                <option value="Organizer">Organizer</option>
+                            </select>
+                            <div id="guestTypeError" class="error" role="alert" aria-live="polite"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="image" class="field-required" id="imageLabel">Upload Photo</label>
+                            <div class="file-upload">
+                                <div class="file-upload-btn">Choose File</div>
+                                <input type="file" id="image" aria-labelledby="imageLabel" aria-required="true" aria-describedby="imageError" accept="image/*" required>
+                            </div>
+                            <div class="form-hint">Accepted formats: JPG, PNG. Max size: 5MB</div>
+                            <div id="imageError" class="error" role="alert" aria-live="polite"></div>
+                            <div class="preview-container" id="previewContainer">
+                                <img src="" alt="Preview" class="preview-image" id="previewImage">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-navigation">
+                        <button type="button" id="prevBtn" class="btn btn-secondary">Previous</button>
+                        <button type="button" id="sendOtpBtn" class="btn">Send OTP via SMS</button>
+                    </div>
+                </div>
+                
+                
+                <!-- Step 3: OTP Verification -->
+                <div class="form-step" id="step3-form">
+                    <div class="loading-spinner" id="loadingSpinner"></div>
+                    
+                    <div class="otp-section" id="otpSection">
+                        <h3>OTP Verification</h3>
+                        <p>We've sent an OTP to your mobile number via SMS. Please enter it below to verify.</p>
+                        
+                        <div class="otp-inputs">
+                            <input type="text" id="otp1" maxlength="1" aria-label="First digit of OTP">
+                            <input type="text" id="otp2" maxlength="1" aria-label="Second digit of OTP">
+                            <input type="text" id="otp3" maxlength="1" aria-label="Third digit of OTP">
+                            <input type="text" id="otp4" maxlength="1" aria-label="Fourth digit of OTP">
+                            <input type="text" id="otp5" maxlength="1" aria-label="Fifth digit of OTP">
+                            <input type="text" id="otp6" maxlength="1" aria-label="Sixth digit of OTP">
+                        </div>
+                        
+                        <div class="otp-options">
+                            <button type="button" id="verifyOtpBtn" class="btn">Verify OTP</button>
+                            <button type="button" id="resendOtpBtn" class="btn" style="background: rgba(149, 165, 166, 0.9);">Resend OTP</button>
+                        </div>
+                        
+                        <div id="otpError" class="error" style="text-align: center; margin-top: 10px;" role="alert" aria-live="polite"></div>
+                    </div>
+                    
+                    <div class="form-navigation">
+                        <button type="button" id="prevBtn2" class="btn btn-secondary">Previous</button>
+                        <button type="submit" id="submitBtn" class="btn" disabled>Complete Registration</button>
+                    </div>
+                </div>
+            </form>
+            
+            <!-- Enhanced Event Pass Template - ID Card Format -->
+            <div class="event-pass-container" id="eventPassContainer">
+                <div class="event-pass" id="eventPass">
+                    <!-- Decorative Elements -->
+                    <div class="corner-decoration corner-top-left"></div>
+                    <div class="corner-decoration corner-top-right"></div>
+                    <div class="corner-decoration corner-bottom-left"></div>
+                    <div class="corner-decoration corner-bottom-right"></div>
+                    
+                    <div class="pass-graphic graphic-top-right"></div>
+                    <div class="pass-graphic graphic-bottom-left"></div>
+                    
+                    <div class="pass-header">
+                        <div class="business-text">ATIRATH HOLDINGS INDIA LIMITED</div>
+                        <div class="year-text">2025</div>
+                        
+                        <!-- Serial Number - Now positioned above VIP section -->
+                        <div class="serial-number" id="serialNumber">SN: 000</div>
+                        
+                        <div class="logo-row">
+                            <div class="pass-logo">
+                                <img src="./Agro Logo.png" alt="Atirath Holdings Logo">
+                            </div>
+                            <!-- VIP Section - Now appears below serial number -->
+                            <div class="vip-section">EVENT PASS</div>
+                            <div class="pass-logo">
+                                <img src="./Ap Logo.png" alt="Andhra Pradesh Logo">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Improved layout structure -->
+                    <div class="pass-content">
+                        <div class="pass-left">
+                            <div class="user-name" id="passName"></div>
+                            <div class="user-title" id="passGuestType"></div>
+                            
+                            <div class="pass-user-details">
+                                <div class="detail-row">
+                                    <div class="detail-label">Registration ID:</div>
+                                    <div class="detail-value" id="passId"></div>
+                                </div>
+                                <div class="detail-row">
+                                    <div class="detail-label">Email:</div>
+                                    <div class="detail-value" id="passEmail"></div>
+                                </div>
+                                <div class="detail-row">
+                                    <div class="detail-label">Phone:</div>
+                                    <div class="detail-value" id="passPhone"></div>
+                                </div>
+                                <div class="detail-row">
+                                    <div class="detail-label">Aadhaar:</div>
+                                    <div class="detail-value" id="passAadhaar"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="pass-right">
+                            <div class="pass-photo-section">
+                                <div class="pass-photo-label">PHOTO</div>
+                                <div class="pass-user-image">
+                                    <img src="" alt="User Photo" id="passImage">
+                                </div>
+                            </div>
+                            
+                            <!-- QR Code Section - Improved alignment -->
+                            <div class="pass-qr-section">
+                                <div class="qr-code" id="qrCode"></div>
+                                <p class="qr-note">Scan QR code to verify registration</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="pass-footer">
+                        <div class="event-info">
+                            <h3>Event Details</h3>
+                            <p><strong>Date:</strong> November 26, 2025</p>
+                            <p><strong>Time:</strong> 9:00 AM - 5:00 PM</p>
+                            <p><strong>Venue:</strong> Varun Novotel, Vijayawada</p>
+                        </div>
+                        
+                        <div class="sponsor-section">
+                            <div class="sponsor-text">Sponsored by</div>
+                            <div class="sponsor-text">Atirath Holdings</div>
+                            <div class="website-text">www.atirathholdings.com</div>
+                            <div class="sponsor-text">For Call Assistance : 7396007479</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="pass-actions">
+                    <button class="action-btn download-btn" id="downloadBtn">Download Event Pass</button>
+                    <button class="action-btn back-btn" id="backBtn">Back to Registration</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript remains the same as in the original file -->
+    <script>
+// Initialize Supabase client (keep this here or move to top if you prefer)
+
+const EMAILJS_SERVICE_ID   = 'service_wj10k4a';        // ← Your Service ID
+const EMAILJS_TEMPLATE_ID  = 'template_upwy1af';       // ← Your Template ID
+const EMAILJS_PUBLIC_KEY   = 'sTubhFC9MITNCHln4';  // ← Your Public Key
+
+// Initialize EmailJS (must be called once)
+emailjs.init(EMAILJS_PUBLIC_KEY);
+
+const client = supabase.createClient(
+  "https://trnqocidfcogrsjvfaqu.supabase.co",
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRybnFvY2lkZmNvZ3JzanZmYXF1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1NDU0ODEsImV4cCI6MjA3OTEyMTQ4MX0.LXZGOvhr3ECotvH3IuTJr1puYsvQ5RsYW9jA7mGW5hw"
+);
+
+// ---------- Helper: validate code against DB (case-insensitive) ----------
+async function isValidCode(code) {
+  if (!code) return { valid: false, message: "Enter registration code" };
+  try {
+    const normalized = code.trim();
+    const { data, error } = await client
+      .from("registration_codes")
+      .select("*")
+      .ilike("code", normalized) // case-insensitive match
+      .maybeSingle();
+
+    if (error) {
+      console.error("Supabase error checking code:", error);
+      return { valid: false, message: "Server error verifying code" };
+    }
+    if (!data) return { valid: false, message: "Invalid registration code" };
+    if (data.used === true) return { valid: false, message: "This code has already been used" };
+    return { valid: true, data };
+  } catch (e) {
+    console.error(e);
+    return { valid: false, message: "Unknown error" };
+  }
+}
+
+// ---------- Helper: upload photo to Supabase Storage ----------
+async function uploadPhotoFile(file, code) {
+  if (!file) return null;
+  try {
+    const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
+    const filePath = `photos/${code}_${Date.now()}.${ext}`;
+    const { error: uploadError } = await client.storage.from("photos").upload(filePath, file, { upsert: true });
+    if (uploadError) {
+      console.error("Storage upload error:", uploadError);
+      return null;
+    }
+    const { data: publicUrl } = client.storage.from("photos").getPublicUrl(filePath);
+    return publicUrl?.publicUrl || null;
+  } catch (e) {
+    console.error(e);
+    return null;
+  }
+}
+
+// ---------- Helper: upload event pass canvas PNG to Supabase Storage ----------
+async function uploadEventPass(code, canvas) {
+  if (!canvas) return null;
+  try {
+    // convert canvas -> blob
+    const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+    if (!blob) return null;
+
+    const filePath = `event_passes/${code}_pass_${Date.now()}.png`;
+    const { error: uploadError } = await client.storage.from("photos").upload(filePath, blob, { upsert: true });
+    if (uploadError) {
+      console.error("Event pass upload error:", uploadError);
+      return null;
+    }
+    const { data: publicUrl } = client.storage.from("photos").getPublicUrl(filePath);
+    return publicUrl?.publicUrl || null;
+  } catch (e) {
+    console.error("uploadEventPass exception:", e);
+    return null;
+  }
+}
+async function sendPassEmailWithLink(name, email, downloadUrl) {
+  try {
+    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+      to_name: name,
+      to_email: email,
+      name: name,
+      download_link: downloadUrl,           // ← new variable
+      event_pass: null                      // ← we don’t use the image anymore
+    });
+    showToast('Event Pass sent to your email!', 'success');
+  } catch (err) {
+    console.error("Email failed:", err);
+    showToast('Registered successfully, but email failed to send.', 'warning');
+  }
+}
+
+/* ----------------- DOM element references ----------------- */
+const userIdInput = document.getElementById('userId');
+const userIdError = document.getElementById('userIdError');
+const userIdSuccess = document.getElementById('userIdSuccess');
+const nextBtn = document.getElementById('nextBtn');
+const prevBtn = document.getElementById('prevBtn');
+const prevBtn2 = document.getElementById('prevBtn2');
+const step1Form = document.getElementById('step1-form');
+const step2Form = document.getElementById('step2-form');
+const step3Form = document.getElementById('step3-form');
+const nameInput = document.getElementById('name');
+const emailInput = document.getElementById('email');
+const phoneInput = document.getElementById('phone');
+const aadhaarInput = document.getElementById('aadhaar');
+const guestTypeInput = document.getElementById('guestType');
+const sendOtpBtn = document.getElementById('sendOtpBtn');
+const otpSection = document.getElementById('otpSection');
+const verifyOtpBtn = document.getElementById('verifyOtpBtn');
+const resendOtpBtn = document.getElementById('resendOtpBtn');
+const otpError = document.getElementById('otpError');
+const submitBtn = document.getElementById('submitBtn');
+const imageInput = document.getElementById('image');
+const imageError = document.getElementById('imageError');
+const previewContainer = document.getElementById('previewContainer');
+const previewImage = document.getElementById('previewImage');
+const eventPassContainer = document.getElementById('eventPassContainer');
+const eventPass = document.getElementById('eventPass');
+const passName = document.getElementById('passName');
+const passId = document.getElementById('passId');
+const passEmail = document.getElementById('passEmail');
+const passPhone = document.getElementById('passPhone');
+const passAadhaar = document.getElementById('passAadhaar');
+const passGuestType = document.getElementById('passGuestType');
+const passImage = document.getElementById('passImage');
+const qrCode = document.getElementById('qrCode');
+const downloadBtn = document.getElementById('downloadBtn');
+const backBtn = document.getElementById('backBtn');
+const registrationForm = document.getElementById('registrationForm');
+const header = document.querySelector('.header');
+const eventDetails = document.querySelector('.event-details');
+const smsSimulation = document.getElementById('smsSimulation');
+const smsOtp = document.getElementById('smsOtp');
+const smsClose = document.getElementById('smsClose');
+const overlay = document.getElementById('overlay');
+const serialNumber = document.getElementById('serialNumber');
+const loadingSpinner = document.getElementById('loadingSpinner');
+const toast = document.getElementById('toast');
+const step1 = document.getElementById('step1');
+const step2 = document.getElementById('step2');
+const step3 = document.getElementById('step3');
+const step4 = document.getElementById('step4');
+const formSavedIndicator = document.getElementById('formSavedIndicator');
+const adminPanel = document.getElementById('adminPanel');
+const exportDataBtn = document.getElementById('exportDataBtn');
+const clearDataBtn = document.getElementById('clearDataBtn');
+const toggleAdminBtn = document.getElementById('toggleAdminBtn');
+
+/* ----------------- Local browser state ----------------- */
+const usedCodes = new Set(JSON.parse(localStorage.getItem('atirathUsedCodes') || '[]'));
+const registeredUsers = JSON.parse(localStorage.getItem('atirathRegisteredUsers') || '[]');
+let currentOtp = '';
+let uploadedImageSrc = '';
+let qrCodeDataURL = '';
+let otpRequestCount = 0;
+let lastOtpRequestTime = 0;
+
+/* ----------------- Utilities & small helpers ----------------- */
+function debounce(func, wait){ let t; return (...a)=>{ clearTimeout(t); t=setTimeout(()=>func(...a), wait); }; }
+function showToast(msg, type='info'){ if(!toast){ console.log(msg); return;} toast.textContent=msg; toast.className=`toast ${type}`; toast.classList.add('show'); setTimeout(()=>toast.classList.remove('show'),3000); }
+function showFormSavedIndicator(){ if(!formSavedIndicator) return; formSavedIndicator.style.display='block'; setTimeout(()=>formSavedIndicator.style.display='none',1800); }
+function saveUsedCodes(){ localStorage.setItem('atirathUsedCodes', JSON.stringify([...usedCodes])); }
+function saveRegisteredUsers(){ localStorage.setItem('atirathRegisteredUsers', JSON.stringify(registeredUsers)); }
+
+/* ----------------- SMS simulation ----------------- */
+function showSmsSimulation(phone, otp){ smsOtp.textContent = otp; overlay.style.display='block'; smsSimulation.style.display='block'; }
+function closeSmsSimulation(){ overlay.style.display='none'; smsSimulation.style.display='none'; }
+
+/* ----------------- UI progress & steps ----------------- */
+function updateProgressBar(step){
+  step1.classList.remove('active','completed');
+  step2.classList.remove('active','completed');
+  step3.classList.remove('active','completed');
+  step4.classList.remove('active','completed');
+  if(step>=1) step1.classList.add('completed');
+  if(step>=2) step2.classList.add('completed');
+  if(step>=3) step3.classList.add('completed');
+  if(step>=4) step4.classList.add('completed');
+  if(step===1) step1.classList.add('active');
+  if(step===2) step2.classList.add('active');
+  if(step===3) step3.classList.add('active');
+  if(step===4) step4.classList.add('active');
+}
+function goToStep(step){
+  step1Form.classList.remove('active'); step2Form.classList.remove('active'); step3Form.classList.remove('active');
+  if(step===1){ step1Form.classList.add('active'); updateProgressBar(1); }
+  else if(step===2){ step2Form.classList.add('active'); updateProgressBar(2); }
+  else if(step===3){ step3Form.classList.add('active'); updateProgressBar(3); otpSection.style.display='block'; }
+}
+function getCurrentStep(){ if(step1Form.classList.contains('active')) return 1; if(step2Form.classList.contains('active')) return 2; if(step3Form.classList.contains('active')) return 3; return 1; }
+function saveFormProgress(){ const formData={ userId:userIdInput.value, name:nameInput.value, email:emailInput.value, phone:phoneInput.value, aadhaar:aadhaarInput.value, guestType:guestTypeInput.value, currentStep:getCurrentStep() }; localStorage.setItem('atirathFormProgress', JSON.stringify(formData)); showFormSavedIndicator(); }
+function loadFormProgress(){ const saved=JSON.parse(localStorage.getItem('atirathFormProgress')||'{}'); if(!saved) return; userIdInput.value=saved.userId||''; nameInput.value=saved.name||''; emailInput.value=saved.email||''; phoneInput.value=saved.phone||''; aadhaarInput.value=saved.aadhaar||''; guestTypeInput.value=saved.guestType||''; if(saved.currentStep) goToStep(saved.currentStep); if(userIdInput.value) validateUserId(); if(nameInput.value) validateName(); if(emailInput.value) validateEmail(); if(phoneInput.value) validatePhone(); if(aadhaarInput.value) validateAadhaar(); if(guestTypeInput.value) validateGuestType(); }
+function clearFormProgress(){ localStorage.removeItem('atirathFormProgress'); }
+
+/* ----------------- Field helpers ----------------- */
+function showFieldError(field, message){ const el=document.getElementById(field.id+'Error'); if(el){ el.textContent=message; el.style.display='block'; } field.classList.add('input-error'); field.classList.remove('input-success'); }
+function clearFieldError(field){ const el=document.getElementById(field.id+'Error'); if(el) el.style.display='none'; field.classList.remove('input-error'); field.classList.add('input-success'); }
+
+/* ----------------- Rate-limit for OTP ----------------- */
+function canRequestOtp(){ const now=Date.now(); if(now-lastOtpRequestTime>3600000) otpRequestCount=0; if(otpRequestCount>=3){ showToast('Too many OTP requests. Try later','error'); return false;} otpRequestCount++; lastOtpRequestTime = now; return true; }
+
+/* ----------------- Basic validators ----------------- */
+function validateName(){ const n=nameInput.value.trim(); if(!n){ showFieldError(nameInput,'Full name is required'); return; } if(n.length<2) showFieldError(nameInput,'Please enter a valid name'); else clearFieldError(nameInput); }
+function validateEmail(){ const e=emailInput.value.trim(); const re=/^[^\s@]+@[^\s@]+\.[^\s@]+$/; if(!e){ showFieldError(emailInput,'Email is required'); return; } if(!re.test(e)) showFieldError(emailInput,'Please enter a valid email address'); else clearFieldError(emailInput); }
+function validatePhone(){ const p=phoneInput.value.trim(); if(!p){ showFieldError(phoneInput,'Phone number is required'); return; } if(!/^[0-9]{10}$/.test(p)) showFieldError(phoneInput,'Phone number must be exactly 10 digits'); else clearFieldError(phoneInput); }
+function validateAadhaar(){ const a=aadhaarInput.value.trim(); if(!a){ showFieldError(aadhaarInput,'Aadhaar number is required'); return; } if(!/^[0-9]{12}$/.test(a)) showFieldError(aadhaarInput,'Aadhaar number must be exactly 12 digits'); else clearFieldError(aadhaarInput); }
+function validateGuestType(){ if(!guestTypeInput.value) showFieldError(guestTypeInput,'Please select a guest type'); else clearFieldError(guestTypeInput); }
+
+/* ----------------- OTP helpers ----------------- */
+function setupOtpInputs(){ const otpInputs=document.querySelectorAll('.otp-inputs input'); otpInputs.forEach((input, idx)=>{ input.addEventListener('input', ()=>{ if(input.value.length===1 && idx<otpInputs.length-1) otpInputs[idx+1].focus(); }); input.addEventListener('keydown', (e)=>{ if(e.key==='Backspace' && input.value==='' && idx>0) otpInputs[idx-1].focus(); }); }); }
+function getEnteredOtp(){ return Array.from(document.querySelectorAll('.otp-inputs input')).map(i=>i.value).join(''); }
+function clearOtpInputs(){ document.querySelectorAll('.otp-inputs input').forEach(i=>i.value=''); document.getElementById('otp1')?.focus(); otpError.style.display='none'; }
+
+/* ----------------- Image preview ----------------- */
+imageInput.addEventListener('change', function(){
+  const file = this.files[0];
+  if(!file){ previewContainer.style.display='none'; uploadedImageSrc=''; return; }
+  const valid = ['image/jpeg','image/jpg','image/png'];
+  if(!valid.includes(file.type)){ imageError.textContent='Please select JPG or PNG'; imageError.style.display='block'; return; }
+  if(file.size > 5*1024*1024){ imageError.textContent='Image must be < 5MB'; imageError.style.display='block'; return; }
+  const reader = new FileReader();
+  reader.onload = (e)=>{ previewImage.src = e.target.result; previewContainer.style.display='block'; uploadedImageSrc = e.target.result; imageError.style.display='none'; saveFormProgress(); };
+  reader.readAsDataURL(file);
+});
+
+/* ----------------- validateUserId ----------------- */
+async function validateUserId(){
+  const code=userIdInput.value.trim();
+  if(!code){ showFieldError(userIdInput,'Registration ID is required'); userIdSuccess.style.display='none'; return false; }
+  const res = await isValidCode(code);
+  if(!res.valid){ showFieldError(userIdInput, res.message || 'Invalid Registration ID'); userIdSuccess.style.display='none'; return false; }
+  clearFieldError(userIdInput);
+  userIdSuccess.textContent = 'Valid Registration ID - Click Next to continue';
+  userIdSuccess.style.display = 'block';
+  return true;
+}
+
+/* ----------------- Event listeners: navigation & admin ----------------- */
+nextBtn.addEventListener('click', async ()=>{ if(await validateUserId()){ goToStep(2); saveFormProgress(); } });
+prevBtn.addEventListener('click', ()=>{ goToStep(1); saveFormProgress(); });
+prevBtn2.addEventListener('click', ()=>{ goToStep(2); saveFormProgress(); });
+exportDataBtn.addEventListener('click', ()=>{ if(registeredUsers.length===0){ showToast('No registrations yet','info'); return; } const blob=new Blob([JSON.stringify(registeredUsers,null,2)],{type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='registrations_'+new Date().toISOString().slice(0,10)+'.json'; a.click(); });
+clearDataBtn.addEventListener('click', ()=>{ if(confirm('Clear all local registration data?')){ localStorage.removeItem('atirathUsedCodes'); localStorage.removeItem('atirathRegisteredUsers'); localStorage.removeItem('atirathFormProgress'); usedCodes.clear(); registeredUsers.length=0; showToast('Local data cleared','info'); }});
+toggleAdminBtn.addEventListener('click', ()=>{ adminPanel.style.display=(adminPanel.style.display==='block')?'none':'block'; });
+document.addEventListener('keydown',(e)=>{ if(e.ctrlKey && e.shiftKey && e.key==='A'){ toggleAdminBtn.click(); }});
+smsClose.addEventListener('click', closeSmsSimulation);
+overlay.addEventListener('click', closeSmsSimulation);
+
+/* ----------------- OTP: send / verify / resend (simulated) ----------------- */
+sendOtpBtn.addEventListener('click', async function(){
+  const code = userIdInput.value.trim();
+  const name = nameInput.value.trim();
+  const email = emailInput.value.trim();
+  const phone = phoneInput.value.trim();
+  const aadhaar = aadhaarInput.value.trim();
+  const guestType = guestTypeInput.value;
+  if(!code || !name || !email || !phone || !aadhaar || !guestType){ showToast('Please fill all required fields before sending OTP','error'); return; }
+  const codeCheck = await isValidCode(code);
+  if(!codeCheck.valid){ showToast(codeCheck.message || 'Invalid Registration ID','error'); return; }
+  if(usedCodes.has(code)){ showToast('This Registration ID has already been used','error'); return; }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ showToast('Invalid email','error'); return; }
+  if(!/^[0-9]{10}$/.test(phone)){ showToast('Phone must be 10 digits','error'); return; }
+  if(!/^[0-9]{12}$/.test(aadhaar)){ showToast('Aadhaar must be 12 digits','error'); return; }
+  if(!imageInput.files[0]){ showToast('Please upload your photo before sending OTP','error'); return; }
+  if(!canRequestOtp()) return;
+  loadingSpinner.style.display='block'; sendOtpBtn.disabled=true;
+  currentOtp = Math.floor(100000 + Math.random()*900000).toString();
+  setTimeout(()=>{ loadingSpinner.style.display='none'; sendOtpBtn.disabled=false; goToStep(3); setTimeout(()=>showSmsSimulation(phone, currentOtp),300); clearOtpInputs(); showToast('OTP sent (simulation) to ' + phone, 'success'); }, 1200);
+});
+verifyOtpBtn.addEventListener('click', ()=>{ const entered=getEnteredOtp(); if(entered.length!==6){ otpError.textContent='Please enter complete OTP'; otpError.style.display='block'; return; } if(entered===currentOtp){ otpError.style.display='none'; submitBtn.disabled=false; showToast('OTP verified — you may complete registration','success'); } else { otpError.textContent='Invalid OTP'; otpError.style.display='block'; showToast('Invalid OTP','error'); }});
+resendOtpBtn.addEventListener('click', async ()=>{ if(!canRequestOtp()) return; currentOtp = Math.floor(100000 + Math.random()*900000).toString(); const phone = phoneInput.value.trim(); setTimeout(()=>showSmsSimulation(phone, currentOtp),300); clearOtpInputs(); showToast('OTP resent (simulation)', 'info'); });
+
+/* ----------------- Submit registration: upload photo, insert DB, generate pass, capture+upload pass, update DB ----------------- */
+registrationForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const code = userIdInput.value.trim();
+  const name = nameInput.value.trim();
+  const email = emailInput.value.trim();
+  const phone = phoneInput.value.trim();
+  const aadhaar = aadhaarInput.value.trim();
+  const guestType = guestTypeInput.value;
+
+  // validations...
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){ showToast('Invalid email','error'); return; }
+  if(!/^[0-9]{10}$/.test(phone)){ showToast('Phone must be 10 digits','error'); return; }
+  if(!/^[0-9]{12}$/.test(aadhaar)){ showToast('Aadhaar must be 12 digits','error'); return; }
+  if(!imageInput.files[0]){ showToast('Please upload your photo','error'); return; }
+
+  const codeCheck = await isValidCode(code);
+  if(!codeCheck.valid){ showToast(codeCheck.message || 'Invalid code','error'); return; }
+
+  loadingSpinner.style.display='block';
+  submitBtn.disabled = true;
+
+  let photoUrl = null;
+  let canvas = null;
+
+  try {
+    const file = imageInput.files[0];
+    photoUrl = await uploadPhotoFile(file, code);
+
+    const payload = {
+      full_name: name,
+      email, phone, aadhaar,
+      guest_type: guestType,
+      code,
+      photo_url: photoUrl
+    };
+
+    const { error: insertError } = await client.from('registrations').insert([payload]).select();
+    if (insertError) throw insertError;
+
+    // Mark code as used
+    await client.from('registration_codes').update({ used: true, used_by: name, used_at: new Date().toISOString() }).ilike('code', code);
+
+    usedCodes.add(code); saveUsedCodes();
+    const serial = `SN: ${(registeredUsers.length+1).toString().padStart(3,'0')}`;
+    const userData = { userId: code, name, email, phone, aadhaar, guestType, serial, registrationDate: new Date().toISOString(), photo_url: photoUrl };
+    registeredUsers.push(userData); saveRegisteredUsers();
+
+    generateEventPass(userData);
+
+    // Show pass so html2canvas can capture
+    header.style.display = 'none';
+    eventDetails.style.display = 'none';
+    registrationForm.style.display = 'none';
+    eventPassContainer.style.display = 'block';
+    updateProgressBar(4);
+    await new Promise(r => setTimeout(r, 500)); // wait for render
+
+    // Generate high-quality pass image
+    canvas = await html2canvas(document.querySelector('.event-pass'), { scale: 2, useCORS: true, backgroundColor: null });
+
+    // === UPLOAD PASS TO SUPABASE (optional) ===
+    const eventPassUrl = await uploadEventPass(code, canvas);
+
+    // === AUTOMATICALLY SEND EMAIL WITH PASS ===
+    try {
+      const base64Image = canvas.toDataURL('image/png').split(',')[1]; // pure base64
+
+      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+        to_name: name,
+        to_email: email,
+        name: name,
+        event_pass: `data:image/png;base64,${base64Image}` // inline image
+      });
+
+      showToast('Registration successful! Event Pass sent to your email.', 'success');
+    } catch (emailErr) {
+      console.error("Email send failed:", emailErr);
+      showToast('Registration successful! But email could not be sent.', 'warning');
+    }
+
+    // Optional: save pass URL to DB
+    if (eventPassUrl) {
+      await client.from('registrations').update({ event_pass_url: eventPassUrl }).eq('code', code);
+    }
+
+  } catch (err) {
+    console.error('Registration error:', err);
+    showToast('Registration failed. Please try again.', 'error');
+  }
+
+  loadingSpinner.style.display='none';
+  submitBtn.disabled = false;
+});
+/* ----------------- Event pass generation & QR ----------------- */
+function customizeEventPassBasedOnGuestType(guestType) {
+  eventPass.classList.remove('vip-pass', 'corporate-pass', 'government-pass');
+  switch (guestType) {
+    case 'VIP Guest': eventPass.classList.add('vip-pass'); break;
+    case 'Corporate Partner': eventPass.classList.add('corporate-pass'); break;
+    case 'Government Official': eventPass.classList.add('government-pass'); break;
+    default: break;
+  }
+}
+
+function generateEventPass(userData){
+  passName.textContent = userData.name;
+  passId.textContent = userData.userId;
+  passEmail.textContent = userData.email;
+  passPhone.textContent = userData.phone;
+  passAadhaar.textContent = userData.aadhaar;
+  passGuestType.textContent = userData.guestType;
+  serialNumber.textContent = userData.serial;
+  customizeEventPassBasedOnGuestType(userData.guestType);
+  passImage.src = userData.photo_url || uploadedImageSrc || 'https://via.placeholder.com/120x140/1a2a6c/ffffff?text=No+Image';
+  generateQRCode(userData);
+}
+
+function generateQRCode(userData){
+  const userDataString = `
+ATIRATH HOLDINGS INDIA LIMITED
+EVENT REGISTRATION DETAILS
+================================
+Serial No: ${userData.serial}
+Name: ${userData.name}
+Registration ID: ${userData.userId}
+Email: ${userData.email}
+Phone: ${userData.phone}
+Aadhaar: ${userData.aadhaar}
+Guest Type: ${userData.guestType}
+--------------------------------
+Event: Atirath Holdings Corporate Event
+Date: November 26, 2025
+Venue: Varun Novotel, Vijayawada
+================================
+`.trim();
+  const qr = qrcode(0, 'M');
+  qr.addData(userDataString);
+  qr.make();
+  const img = document.createElement('img');
+  img.src = qr.createDataURL(4);
+  qrCode.innerHTML = '';
+  qrCode.appendChild(img);
+  qrCodeDataURL = img.src;
+}
+
+/* ----------------- Download pass (unchanged) ----------------- */
+downloadBtn.addEventListener('click', async () => {
+  loadingSpinner.style.display = 'block';
+  downloadBtn.disabled = true;
+
+  try {
+    const canvas = await html2canvas(document.querySelector('.event-pass'), { scale: 2, useCORS: true, backgroundColor: null });
+
+    // download local
+    const localURL = canvas.toDataURL('image/png');
+    const a = document.createElement('a');
+    a.href = localURL;
+    a.download = `Atirath_Event_Pass_${passId.textContent}.png`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    // also upload pass to storage and update DB (optional duplicate-safe)
+    const eventPassUrl = await uploadEventPass(passId.textContent, canvas);
+    if (eventPassUrl) {
+      // update registrations table
+      await client.from('registrations').update({ event_pass_url: eventPassUrl }).eq('code', passId.textContent);
+      showToast("Event pass uploaded & downloaded!", "success");
+    } else {
+      showToast("Downloaded, but upload failed!", "error");
+    }
+  } catch (err) {
+    console.error('Download error:', err);
+    showToast('Error generating/downloading pass', 'error');
+  }
+
+  loadingSpinner.style.display = 'none';
+  downloadBtn.disabled = false;
+});
+
+/* ----------------- Back button ----------------- */
+backBtn.addEventListener('click', ()=> {
+  eventPassContainer.style.display = 'none';
+  header.style.display = 'block';
+  eventDetails.style.display = 'block';
+  registrationForm.style.display = 'block';
+  registrationForm.reset();
+  userIdError.style.display='none'; userIdSuccess.style.display='none';
+  document.getElementById('emailError').style.display='none'; document.getElementById('phoneError').style.display='none';
+  document.getElementById('aadhaarError').style.display='none'; document.getElementById('nameError').style.display='none';
+  document.getElementById('guestTypeError').style.display='none'; imageError.style.display='none';
+  otpSection.style.display='none'; submitBtn.disabled=true; previewContainer.style.display='none'; uploadedImageSrc='';
+  goToStep(1);
+  showToast('Ready for next registration', 'info');
+});
+
+/* ----------------- Init ----------------- */
+function init(){
+  loadFormProgress();
+  setupOtpInputs();
+  setupRealTimeValidation();
+  updateProgressBar(1);
+  if(registeredUsers.length>0) exportDataBtn.style.display='block';
+}
+function setupRealTimeValidation(){
+  const fields = [
+    { element: userIdInput, validator: validateUserId },
+    { element: nameInput, validator: validateName },
+    { element: emailInput, validator: validateEmail },
+    { element: phoneInput, validator: validatePhone },
+    { element: aadhaarInput, validator: validateAadhaar },
+    { element: guestTypeInput, validator: validateGuestType }
+  ];
+  fields.forEach(f=> f.element.addEventListener('input', debounce(function(){ f.validator.call(this); saveFormProgress(); }, 300)));
+}
+document.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
+</html>

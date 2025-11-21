@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atirath Holdings - Event Registration</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+</head>
+<body>
+    <!-- Toast Notifications -->
+    <div class="toast" id="toast"></div>
+    
+    <!-- Form Saved Indicator -->
+    <div class="form-saved-indicator" id="formSavedIndicator">Form Progress Saved</div>
+    
+    <!-- Admin Panel -->
+    <div class="admin-panel" id="adminPanel">
+        <h3>Admin Panel</h3>
+        <button id="exportDataBtn" class="export-btn">Export Registration Data</button>
+        <button id="clearDataBtn" class="btn" style="background: rgba(231, 76, 60, 0.9);">Clear All Data</button>
+        <button id="toggleAdminBtn" class="btn btn-secondary">Close Admin</button>
+    </div>
+    
+    <!-- SMS Simulation Popup -->
+    <div class="overlay" id="overlay"></div>
+    <div class="sms-simulation" id="smsSimulation">
+        <div class="sms-header">
+            SMS Received
+            <button class="sms-close" id="smsClose">×</button>
+        </div>
+        <div class="sms-body">
+            <p>New message from <span class="sms-number" id="smsSender">ATIRATH</span></p>
+            <div class="sms-otp" id="smsOtp">123456</div>
+            <p>Your OTP for event registration is shown above.</p>
+            <p><small>This is a simulation. In a real implementation, this would be sent via SMS gateway.</small></p>
+        </div>
+    </div>
+
+     <div class="container">
+        <div class="header">
+            <div class="logo-container">
+                <div class="logo">
+                    <!-- Company Logo PNG -->
+                    <img src="./Agro Logo.png" alt="Atirath Holdings Logo">
+                </div>
+                <div class="logo-text">Atirath Holdings India Limited</div>
+            </div>
+            
+            <div class="guest-section">
+                <div class="guest-info">
+                    <div class="guest-name">Chief Guest: Sri Nara Chandra Babu Naidu Garu</div>
+                    <div class="guest-title">Honorable Chief Minister of Andhra Pradesh</div>
+                </div>
+                <div class="guest-image">
+                    <!-- Chief Guest PNG Image -->
+                    <img src="./ncbn.jpg" alt="Chief Guest">
+                </div>
+            </div>
+            
+            <div class="header-image">
+                Exclusive Corporate Event under the Aegis of Atirath Holdings - Laying Foundation Stone for First 3 Compressed Bio Gas (CBG) Plants of a ₹4,000 Crore Initiative in Andhra Pradesh
+            </div>
+        </div>
+        
+        <div class="form-container">
+            <!-- Progress Bar -->
+            <div class="progress-bar">
+                <div class="progress-step active" id="step1">
+                    1
+                    <div class="step-label">ID Verification</div>
+                </div>
+                <div class="progress-step" id="step2">
+                    2
+                    <div class="step-label">Personal Details</div>
+                </div>
+                <div class="progress-step" id="step3">
+                    3
+                    <div class="step-label">OTP Verification</div>
+                </div>
+                <div class="progress-step" id="step4">
+                    4
+                    <div class="step-label">Event Pass</div>
+                </div>
+            </div>
+            
+            <div class="event-details">
+                <h3>Event Details</h3>
+                <p><strong>Date:</strong> November 26, 2025</p>
+                <p><strong>Time:</strong> 9:00 AM - 5:00 PM</p>
+                <p><strong>Venue:</strong> Varun Novotel, Near Benz Circle, Vijayawada</p>
+                <p><strong>Theme:</strong> Innovation & Strategic Growth</p>
+            </div>
+            
+            <form id="registrationForm">
+                <!-- Step 1: ID Verification -->
+                <div class="form-step active" id="step1-form">
+                    <div class="form-group">
+                        <label for="userId" class="field-required" id="userIdLabel">Unique Registration ID</label>
+                        <input type="text" id="userId" aria-labelledby="userIdLabel" aria-required="true" aria-describedby="userIdError userIdSuccess" placeholder="Enter your provided registration ID" required>
+                        <div class="id-info">
+                            <strong>Note:</strong> Use the unique registration ID provided to you. Each ID can only be used once.
+                        </div>
+                        <div id="userIdError" class="error" role="alert" aria-live="polite"></div>
+                        <div id="userIdSuccess" class="success" role="status" aria-live="polite"></div>
+                    </div>
+                    
+                    <div class="form-navigation">
+                        <button type="button" id="nextBtn" class="btn">Next</button>
+                    </div>
+                </div>
+                
+                <!-- Step 2: Personal Details -->
+                <div class="form-step" id="step2-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name" class="field-required" id="nameLabel">Full Name</label>
+                            <input type="text" id="name" aria-labelledby="nameLabel" aria-required="true" aria-describedby="nameError" placeholder="Enter your full name" required>
+                            <div id="nameError" class="error" role="alert" aria-live="polite"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email" class="field-required" id="emailLabel">Email Address</label>
+                            <input type="email" id="email" aria-labelledby="emailLabel" aria-required="true" aria-describedby="emailError" placeholder="Enter your email (e.g., name@example.com)" required pattern="^[^@\s]+@[^@\s]+\.[^@\s]+$" title="Please enter a valid email address">
+                            <div id="emailError" class="error" role="alert" aria-live="polite"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="phone" class="field-required" id="phoneLabel">Phone Number</label>
+                            <input type="tel" id="phone" aria-labelledby="phoneLabel" aria-required="true" aria-describedby="phoneError" placeholder="Enter 10-digit phone number" required pattern="[0-9]{10}" title="Please enter exactly 10 digits" maxlength="10">
+                            <div id="phoneError" class="error" role="alert" aria-live="polite"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="aadhaar" class="field-required" id="aadhaarLabel">Aadhaar Number</label>
+                            <input type="text" id="aadhaar" aria-labelledby="aadhaarLabel" aria-required="true" aria-describedby="aadhaarError" placeholder="Enter 12-digit Aadhaar number" required pattern="[0-9]{12}" title="Please enter exactly 12 digits" maxlength="12">
+                            <div id="aadhaarError" class="error" role="alert" aria-live="polite"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="guestType" class="field-required" id="guestTypeLabel">Guest Type</label>
+                            <select id="guestType" aria-labelledby="guestTypeLabel" aria-required="true" aria-describedby="guestTypeError" required>
+                                <option value="">Select Guest Type</option>
+                                <option value="VIP Guest">VIP Guest</option>
+                                <option value="Corporate Partner">Corporate Partner</option>
+                                <option value="Government Official">Government Official</option>
+                                <option value="Media Representative">Media Representative</option>
+                                <option value="Industry Expert">Industry Expert</option>
+                                <option value="Investor">Guest</option>
+                                <option value="Organizer">Organizer</option>
+                            </select>
+                            <div id="guestTypeError" class="error" role="alert" aria-live="polite"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="image" class="field-required" id="imageLabel">Upload Photo</label>
+                            <div class="file-upload">
+                                <div class="file-upload-btn">Choose File</div>
+                                <input type="file" id="image" aria-labelledby="imageLabel" aria-required="true" aria-describedby="imageError" accept="image/*" required>
+                            </div>
+                            <div class="form-hint">Accepted formats: JPG, PNG. Max size: 5MB</div>
+                            <div id="imageError" class="error" role="alert" aria-live="polite"></div>
+                            <div class="preview-container" id="previewContainer">
+                                <img src="" alt="Preview" class="preview-image" id="previewImage">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-navigation">
+                        <button type="button" id="prevBtn" class="btn btn-secondary">Previous</button>
+                        <button type="button" id="sendOtpBtn" class="btn">Send OTP via SMS</button>
+                    </div>
+                </div>
+                
+                
+                <!-- Step 3: OTP Verification -->
+                <div class="form-step" id="step3-form">
+                    <div class="loading-spinner" id="loadingSpinner"></div>
+                    
+                    <div class="otp-section" id="otpSection">
+                        <h3>OTP Verification</h3>
+                        <p>We've sent an OTP to your mobile number via SMS. Please enter it below to verify.</p>
+                        
+                        <div class="otp-inputs">
+                            <input type="text" id="otp1" maxlength="1" aria-label="First digit of OTP">
+                            <input type="text" id="otp2" maxlength="1" aria-label="Second digit of OTP">
+                            <input type="text" id="otp3" maxlength="1" aria-label="Third digit of OTP">
+                            <input type="text" id="otp4" maxlength="1" aria-label="Fourth digit of OTP">
+                            <input type="text" id="otp5" maxlength="1" aria-label="Fifth digit of OTP">
+                            <input type="text" id="otp6" maxlength="1" aria-label="Sixth digit of OTP">
+                        </div>
+                        
+                        <div class="otp-options">
+                            <button type="button" id="verifyOtpBtn" class="btn">Verify OTP</button>
+                            <button type="button" id="resendOtpBtn" class="btn" style="background: rgba(149, 165, 166, 0.9);">Resend OTP</button>
+                        </div>
+                        
+                        <div id="otpError" class="error" style="text-align: center; margin-top: 10px;" role="alert" aria-live="polite"></div>
+                    </div>
+                    
+                    <div class="form-navigation">
+                        <button type="button" id="prevBtn2" class="btn btn-secondary">Previous</button>
+                        <button type="submit" id="submitBtn" class="btn" disabled>Complete Registration</button>
+                    </div>
+                </div>
+            </form>
+            
+            <!-- Enhanced Event Pass Template - ID Card Format -->
+            <div class="event-pass-container" id="eventPassContainer">
+                <div class="event-pass" id="eventPass">
+                    <!-- Decorative Elements -->
+                    <div class="corner-decoration corner-top-left"></div>
+                    <div class="corner-decoration corner-top-right"></div>
+                    <div class="corner-decoration corner-bottom-left"></div>
+                    <div class="corner-decoration corner-bottom-right"></div>
+                    
+                    <div class="pass-graphic graphic-top-right"></div>
+                    <div class="pass-graphic graphic-bottom-left"></div>
+                    
+                    <div class="pass-header">
+                        <div class="business-text">ATIRATH HOLDINGS INDIA LIMITED</div>
+                        <div class="year-text">2025</div>
+                        
+                        <!-- Serial Number - Now positioned above VIP section -->
+                        <div class="serial-number" id="serialNumber">SN: 000</div>
+                        
+                        <div class="logo-row">
+                            <div class="pass-logo">
+                                <img src="./Agro Logo.png" alt="Atirath Holdings Logo">
+                            </div>
+                            <!-- VIP Section - Now appears below serial number -->
+                            <div class="vip-section">EVENT PASS</div>
+                            <div class="pass-logo">
+                                <img src="./Ap Logo.png" alt="Andhra Pradesh Logo">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Improved layout structure -->
+                    <div class="pass-content">
+                        <div class="pass-left">
+                            <div class="user-name" id="passName"></div>
+                            <div class="user-title" id="passGuestType"></div>
+                            
+                            <div class="pass-user-details">
+                                <div class="detail-row">
+                                    <div class="detail-label">Registration ID:</div>
+                                    <div class="detail-value" id="passId"></div>
+                                </div>
+                                <div class="detail-row">
+                                    <div class="detail-label">Email:</div>
+                                    <div class="detail-value" id="passEmail"></div>
+                                </div>
+                                <div class="detail-row">
+                                    <div class="detail-label">Phone:</div>
+                                    <div class="detail-value" id="passPhone"></div>
+                                </div>
+                                <div class="detail-row">
+                                    <div class="detail-label">Aadhaar:</div>
+                                    <div class="detail-value" id="passAadhaar"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="pass-right">
+                            <div class="pass-photo-section">
+                                <div class="pass-photo-label">PHOTO</div>
+                                <div class="pass-user-image">
+                                    <img src="" alt="User Photo" id="passImage">
+                                </div>
+                            </div>
+                            
+                            <!-- QR Code Section - Improved alignment -->
+                            <div class="pass-qr-section">
+                                <div class="qr-code" id="qrCode"></div>
+                                <p class="qr-note">Scan QR code to verify registration</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="pass-footer">
+                        <div class="event-info">
+                            <h3>Event Details</h3>
+                            <p><strong>Date:</strong> November 26, 2025</p>
+                            <p><strong>Time:</strong> 9:00 AM - 5:00 PM</p>
+                            <p><strong>Venue:</strong> Varun Novotel, Vijayawada</p>
+                        </div>
+                        
+                        <div class="sponsor-section">
+                            <div class="sponsor-text">Sponsored by</div>
+                            <div class="sponsor-text">Atirath Holdings</div>
+                            <div class="website-text">www.atirathholdings.com</div>
+                            <div class="sponsor-text">For Call Assistance : 7396007479</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="pass-actions">
+                    <button class="action-btn download-btn" id="downloadBtn">Download Event Pass</button>
+                    <button class="action-btn back-btn" id="backBtn">Back to Registration</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
